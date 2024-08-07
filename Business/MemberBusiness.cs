@@ -43,7 +43,7 @@ namespace Negocio
         #endregion
 
 
-        private string connectionString = "";
+        private string connectionString = "Server=localhost,1433;Database=emmanueltest;User Id=sa;Password=NiceTry!;";
 
 
         #region Conection and Ex
@@ -967,7 +967,7 @@ namespace Negocio
             }
         }
 
-        private void GetNumberItems()
+        public void GetNumberItems()
         {
             using (var connection = GetConnection())
             {
@@ -976,50 +976,37 @@ namespace Negocio
                 {
                     command.Connection = connection;
 
-                    //Get Total Number of Visitors by date
+                    // Get Total Number of Visitors by date
                     command.CommandText = "SELECT COUNT(asistenciaId) FROM Asistencia WHERE fechaAsistencia BETWEEN @fromDate AND @toDate;";
                     command.Parameters.Clear();
                     command.Parameters.Add("@fromDate", System.Data.SqlDbType.DateTime).Value = startDate;
                     command.Parameters.Add("@toDate", System.Data.SqlDbType.DateTime).Value = endDate;
-                    TotalVisitors = Convert.ToInt32(command.ExecuteScalar());
+                    object result = command.ExecuteScalar();
+                    TotalVisitors = result != DBNull.Value ? Convert.ToInt32(result) : 0;
 
                     // Get Total Number of Customers
                     command.CommandText = "SELECT MAX(clienteId) FROM Clientes";
-                    MembersNum = Convert.ToInt32(command.ExecuteScalar());
+                    result = command.ExecuteScalar();
+                    MembersNum = result != DBNull.Value ? Convert.ToInt32(result) : 0;
 
                     // Get Total Number of Transactions
                     command.CommandText = "SELECT COUNT(transaccionId) FROM Transaccion";
-                    TranNumber = Convert.ToInt32(command.ExecuteScalar());
-
-                    // TODO 
-                    //command.CommandText = "SELECT COUNT(id) FROM Product";
-                    //NumProducts = Convert.ToInt32(command.ExecuteScalar());
+                    result = command.ExecuteScalar();
+                    TranNumber = result != DBNull.Value ? Convert.ToInt32(result) : 0;
 
                     // Get Total Income in the date range
                     command.CommandText = @"
-                                SELECT SUM (monto)
-                                FROM Ingresos 
-                                WHERE fechaIngreso BETWEEN @fromDate AND @toDate;";
-
-                    // Clear parameters before adding new ones
+                        SELECT SUM (monto)
+                        FROM Ingresos 
+                        WHERE fechaIngreso BETWEEN @fromDate AND @toDate;";
                     command.Parameters.Clear();
                     command.Parameters.Add("@fromDate", System.Data.SqlDbType.DateTime).Value = startDate;
                     command.Parameters.Add("@toDate", System.Data.SqlDbType.DateTime).Value = endDate;
-
-                    object result = command.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
-                    {
-                        Income = Convert.ToDecimal(result);
-                    }
-                    else
-                    {
-                        Income = 0; //conver to dec ex!
-                    }
-
+                    result = command.ExecuteScalar();
+                    Income = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
 
                     connection.Close();
                 }
-
             }
         }
 

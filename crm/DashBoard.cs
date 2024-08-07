@@ -284,7 +284,7 @@ namespace TPFinalNivel2_Sansberro
         }
         private void btnHome_Click(object sender, EventArgs e)
         {
-            currentChildForm.Close();
+            currentChildForm?.Close();
             Reset();
         }
 

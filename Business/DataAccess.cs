@@ -19,7 +19,9 @@ namespace Negocio
         }
         public DataAccess()
         {
-            conexion = new SqlConnection("");
+            // Replace "your_password" with the actual SA password you set when running the Docker container
+            string connectionString = "Server=localhost,1433;Database=emmanueltest;User Id=sa;Password=NiceTry!;";
+            conexion = new SqlConnection(connectionString);
             comando = new SqlCommand();
         }
 
