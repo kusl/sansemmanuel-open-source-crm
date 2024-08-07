@@ -20,6 +20,15 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+CREATE TABLE [dbo].[EspecificacionTecnica] (
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+    [Descripcion] nvarchar NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [Id] ASC
+) ON [PRIMARY]
+) ON [PRIMARY];
+
 /****** Object:  Table [dbo].[Cliente]    Script Date: 8/5/2024 8:31:02 PM ******/
 SET ANSI_NULLS ON
 GO
